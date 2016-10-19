@@ -268,4 +268,7 @@ I'll ask the first one:
 
 _Is_this_open_source?_
 
-No. It is currently tied closely to our domain and infrastructure. We would have to do some clean up to make it general purpose enough to open source.  One day hopefully we will do this.   
+No. It is currently tied closely to our domain and infrastructure. We would have to do some clean up to make it general purpose enough to open source.  One day hopefully we will do this.
+
+
+Slides are here [[http://talks.godoc.org/github.com/unravelin/talks/unionfind.slide]]   
