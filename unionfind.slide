@@ -45,7 +45,7 @@ These extracted features are what powers the machine learning models.  This is w
 - Velocity (rate of cards added, orders, etc)
 - Aggregate (distance from mean order value for a client)
 - Exotic things such as distance between characters in a name on a physical keyboard or `aasdfkjsfkasldjfls` detection
-- Network Analysis
+- Network Analysis 
 - Many others
 
  
@@ -69,7 +69,21 @@ Some features require more complex queries that are't simply a key/value problem
 
 For example, we build client aggregate statistics from BigQuery and Cache for a time
 
-Network based features are more challenging 
+Network based features are more challenging.
+
+* What Network features do we want?
+
+We connect things like Phone numbers, credit cards, emails, devices and vouchers.
+
+By doing this we can find sets that contain groups of fraudsters that share cards
+Individials that recreate accounts on the same device or with the same phone number
+We can detect voucher based fraud
+
+We can connect "new" people to existing fraudsters to give a strong signal with very little data
+
+* We studied this offline
+
+.image unionfind/deathstar5.png
 
 * We need a graph database
 
@@ -247,7 +261,7 @@ We just store this in boltDB on disk so it doesn't increase memory pressure
 
 * 
 
-.image unionfind/graph.jpg _ 700
+.image unionfind/graph1.png _ 700
 
 * Future
 
