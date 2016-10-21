@@ -31,8 +31,7 @@ func main() {
 // Node is the node in a UnionFind structure. It counts the number of items
 // below it, points to its parent, and has a list of its children
 type Node struct {
-	// We want the node count so we can promote the largest set to parent when
-	// joining two sets. This helps us keep the depth of the tree small
+	// This is a count of all the nodes this node is a parent of plus itself
 	Count  int32
 	Parent string
 
