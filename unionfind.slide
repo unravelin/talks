@@ -191,7 +191,7 @@ If it does not exists we simply create it and return
 
 * Getting the parent and flattening the graph
 
-If it does exists then we try to get the parent and do some graph promotion
+If it does exist then we try to get the parent and do some graph promotion
 
 .code unionfind/code/main.go /\/\/\ \.\.\./,/^}/ HLpro
 
