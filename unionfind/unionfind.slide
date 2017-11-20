@@ -5,9 +5,9 @@ Gopher at Ravelin
 jono.macdougall@ravelin.com
 
 
-* 
+*
 
-.image unionfind/logo.png _ 600
+.image logo.png _ 600
 
 
 * We Detect Fraud
@@ -15,8 +15,8 @@ jono.macdougall@ravelin.com
 Our platform is a data pipeline to enable *Machine*Learning* and a *Basic*Rules*Engine* to find fraudsters
 
 
-.image unionfind/ravelinworks.png _ 500
- 
+.image ravelinworks.png _ 500
+
 
 * Rules are boring and only get you so far
 
@@ -26,7 +26,7 @@ Our platform is a data pipeline to enable *Machine*Learning* and a *Basic*Rules*
 * But it needs data
 
 Machine learning requires relevant and useful data to train and operate on. It is the most imporant and often the most challenging thing to get right in a machine learning system
- 
+
 If your data is bad, irrelevant or sparse then machine learning won't get you anywhere
 
 
@@ -35,7 +35,7 @@ If your data is bad, irrelevant or sparse then machine learning won't get you an
 Clients send us data and we run it through a feature extraction process
 This grabs everything we know about the history of the customer and transforms the data in to useful features
 
-.image unionfind/dataingest.png 
+.image dataingest.png
 
 * Features
 
@@ -45,10 +45,10 @@ These extracted features are what powers the machine learning models.  This is w
 - Velocity (rate of cards added, orders, etc)
 - Aggregate (distance from mean order value for a client)
 - Exotic things such as distance between characters in a name on a physical keyboard or `aasdfkjsfkasldjfls` detection
-- Network Analysis 
+- Network Analysis
 - Many others
 
- 
+
 
 * Speed is Critical
 
@@ -60,7 +60,7 @@ Latency is a big concern. Getting these complex features has to be fast.
 
 Getting out keyed data is pretty easy these days, even at scale
 
-- Use a Key/Value store (Something like Google BigTable, Cassandra, DynamoDB, etc) 
+- Use a Key/Value store (Something like Google BigTable, Cassandra, DynamoDB, etc)
 - Caching
 
 * Except for complex features
@@ -83,40 +83,40 @@ We can connect "new" people to existing fraudsters to give a strong signal with 
 
 * We studied this offline
 
-.image unionfind/deathstar5.png
+.image deathstar5.png
 
 * We need a graph database
 
-* 
+*
 
-.image unionfind/neo4j.png _ 200
-.image unionfind/titan.png _ 200
-.image unionfind/cayley.png _ 200
+.image neo4j.png _ 200
+.image titan.png _ 200
+.image cayley.png _ 200
 
 * Neo4j
 
 Neo4j is proven, popular and mature
 
-It is also expensive and does not have a good scaling story 
-.image unionfind/neo4j.png _ 400
+It is also expensive and does not have a good scaling story
+.image neo4j.png _ 400
 
 * Titan
 
-Titan is less proven, less popular and less mature but it does scale horizontally. 
+Titan is less proven, less popular and less mature but it does scale horizontally.
 
 Unfortunately, it is very complicated to run and use.  Further, in tests, it did not provide the speed we wanted.
-.image unionfind/titan.png _ 300
+.image titan.png _ 300
 
 * Cayley
 
-Cayley is like titan but even less mature. 
+Cayley is like titan but even less mature.
 
 It is inspired by the graph database that powers googles knowledge graph. One day, maybe we can use it but we were worried it wasn't proven
-.image unionfind/cayley.png _ 200
+.image cayley.png _ 200
 
 * We were not happy with the options
 
-* So we went back to the drawing board 
+* So we went back to the drawing board
 
 * What questions do we actual want to ask?
 
@@ -127,13 +127,13 @@ We knew broadly what we wanted to get out of this database but we kept dreaming 
 
 (also a few other things but let's keep it simple for now)
 
-* Phil Pearl 
+* Phil Pearl
 
 Everything that follows is because of Phil Pearl.
 
 I'm talking about it to secretly take credit for the work he did.
 
-Don't tell Phil (he maybe in the audience...)  
+Don't tell Phil (he maybe in the audience...)
 
 * Enter Union Find
 
@@ -154,15 +154,15 @@ It is built such that we need as few 'hops' as possible to get to a parent or re
 
 In the parent node, we can store metadata about the set as a whole
 
-In our case, we store information in this node such as: 
+In our case, we store information in this node such as:
 
-- Node Counts 
+- Node Counts
 - If the set contains a known fraudster
-- Somewhat arbitrary tags 
+- Somewhat arbitrary tags
 
 It is important to note that this tree loses all the structure of the graph
 
-* 
+*
 
 .iframe https://visualgo.net/ufds 600 1000
 
@@ -176,10 +176,10 @@ To be clear, this is not a production implementation at all and is certainly not
 * First, some structs
 
 This is what our nodes will look like:
-.code unionfind/code/main.go /type Node struct/,/^}/
+.code code/main.go /type Node struct/,/^}/
 
 And a map to hold the data
-.code unionfind/code/main.go /type UnionFind struct/,/^}/
+.code code/main.go /type UnionFind struct/,/^}/
 
 * Creating a node
 
@@ -187,28 +187,28 @@ We do two thing in the function getParentNodeOrNew depending if the node exists 
 
 If it does not exists we simply create it and return
 
-.code unionfind/code/main.go /func.*getParentNode/,/\/\/\ \.\.\./ HLnew
+.code code/main.go /func.*getParentNode/,/\/\/\ \.\.\./ HLnew
 
 * Getting the parent and flattening the graph
 
 If it does exist then we try to get the parent and do some graph promotion
 
-.code unionfind/code/main.go /\/\/\ \.\.\./,/^}/ HLpro
+.code code/main.go /\/\/\ \.\.\./,/^}/ HLpro
 
 * How to add nodes
 
-.code unionfind/code/main.go /\/\/ Add/,/^}/
+.code code/main.go /\/\/ Add/,/^}/
 
 * Storing the data
 
 At this point we update our graph metadata (in this case, count) based on the node we are inserting
 
-.code unionfind/code/main.go /func.*setParent/,/^}/
-.code unionfind/code/main.go /func.*indexNode/,/^}/
+.code code/main.go /func.*setParent/,/^}/
+.code code/main.go /func.*indexNode/,/^}/
 
 * Putting it all together
 
-.play unionfind/code/main.go /func.*main/,/^}/
+.play code/main.go /func.*main/,/^}/
 
 * This is a toy example
 
@@ -216,20 +216,20 @@ What we run in production is far more complex and has been highly optimized for 
 
 See here for some optimization learnings [[https://hackernoon.com/@philpearl]]
 
-.code unionfind/code/main.go /\/\/\ ByteSliceToString/,/^}/
+.code code/main.go /\/\/\ ByteSliceToString/,/^}/
 
 * Count timings are very fast
 
 Upper 95th is under 2ms while the average is closer to 1ms
 
-.image unionfind/counttiming.png _ 1000
+.image counttiming.png _ 1000
 
 * What about scaling and durability
 
 We store everything in memory but persist it to boltDB
 
-We run multiple instances of this service in our infrastructure that get fed off of queues.  
-If one goes down, the others pick up the slack. 
+We run multiple instances of this service in our infrastructure that get fed off of queues.
+If one goes down, the others pick up the slack.
 
 The graph is not the _source_of_truth_ so to speak. We have the ability to rebuild the entire graph from BigQuery in a disaster scenario or if we want to add something to the graph and reindex. We reindex fairly frequently.
 
@@ -243,25 +243,25 @@ Yes.
 
 Though our data scientists keep wanting to ask it more questions.  We have been able to use the parent node to hold the answers to these questions as they are typically questions that are calculated as metadata over the whole graph.
 
-* But it doesn't solve everything 
+* But it doesn't solve everything
 
-We also want to display to clients the constructed graphs 
+We also want to display to clients the constructed graphs
 
 But we threw away the structure of the graph
 
 * So we keep an edge store along side our graph
 
-This allows us to reconstruct the graph though it is much slower than just getting the metadata.  
+This allows us to reconstruct the graph though it is much slower than just getting the metadata.
 
-It is fast enough to do some offline analysis of our graphs 
+It is fast enough to do some offline analysis of our graphs
 It is fast enough for display in dashboards
 
-These are not done at high QPS so we can afford them to be less efficient 
+These are not done at high QPS so we can afford them to be less efficient
 We just store this in boltDB on disk so it doesn't increase memory pressure
 
-* 
+*
 
-.image unionfind/graph1.png _ 700
+.image graph1.png _ 700
 
 * Future
 
@@ -270,7 +270,7 @@ We just store this in boltDB on disk so it doesn't increase memory pressure
 
 * We are Hiring
 
-We want Go developers and Javascript developers 
+We want Go developers and Javascript developers
 
 Come build cool stuff like Union Find with us!
 
@@ -285,4 +285,4 @@ _Is_this_open_source?_
 No. It is currently tied closely to our domain and infrastructure. We would have to do some clean up to make it general purpose enough to open source.  One day hopefully we will do this.
 
 
-Slides are here [[http://talks.godoc.org/github.com/unravelin/talks/unionfind.slide]]   
+Slides are here [[http://talks.godoc.org/github.com/unravelin/talks/unionfind.slide]]
