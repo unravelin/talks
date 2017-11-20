@@ -1,0 +1,37 @@
+Angular 101
+
+Raphael Essoo-Snowdon & Rob Crocombe
+
+* A few things to note
+
+- assumes you have the Dashboard Service running locally
+- sidestep some best practices
+
+* Some tips
+
+- always branch off of `staging`
+- always run `npm i` just in case new node packages have been added
+- run `gulp` to run/serve the dashboard locally
+- Gulp uses live reload but it doesn't pick up new files that have been added since running `gulp`, restart Gulp to fix this
+- `constants.ts` file is where you can update where your environment is pointing
+
+* Demo
+
+* Pre-existing components
+
+- try and use components that exist already in the dashboard
+- `/patterns` has a collection of components that you can use
+- not everything is documented here, but more often than not, most UI elements thast exist in the dashboard today are components
+
+* Next time (if there's any interest)
+
+- bindings and communicating between components
+- nested components
+- transclusion
+- smart vs. dumb components
+- Services, Filters, Directives
+
+* Demo code
+
+- repo can be found here ([[https://github.com/unravelin/dashboard-service/tree/angular-101]])
+- this branch is for demo purposes only, please don't branch off of this branch
